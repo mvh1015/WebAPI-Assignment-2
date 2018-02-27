@@ -60,7 +60,7 @@ passport.use(new LocalStrategy({
 				else {
 					done(null, false, {message:'Bad Password'});
 				
-				}
+				};
 			});
 		});
 		
@@ -116,7 +116,7 @@ app.post("/new-topic", function(request,response){
 		
 		
 			
-		});
+		
 	});
 	
 	/*entries.push({
