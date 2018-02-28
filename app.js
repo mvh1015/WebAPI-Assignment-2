@@ -83,7 +83,7 @@ passport.use(new LocalStrategy({
 app.get("/", ensureAuthenticated, function(request,response){
 	MongoClient.connect(url, function(err,db){
 		if(err) throw err;
-		var dbObj = db.db("favorites");
+		var dbObj = db.db("users");
 		
 		dbObj.collection("favorites").find().toArray(function(err,results){
 			console.log("Site Served");
@@ -112,9 +112,19 @@ app.post("/new-topic", function(request,response){
 	MongoClient.connect(url,function(err, db){
 		if(err)throw err;
 		
-		var dbObj = db.db("favorites");
+		var dbObj = db.db("users");
+		var topicOfChoice;
 		
+		dbObj.collection("users").findOne({username:username}, function(err, results){
+			topicOfChoice = results.category;
+		}
 		
+		dbObj.collection("topic").update(topicOfChoice, function(err,result){
+			console.log("data saved");
+			db.close();
+			response.redirect("/");
+			
+		});
 			
 		
 	});
@@ -143,7 +153,7 @@ app.post("/new-entry", function(request,response){
 	MongoClient.connect(url,function(err, db){
 		if(err)throw err;
 		
-		var dbObj = db.db("favorites");
+		var dbObj = db.db("users");
 
 		dbObj.collection("favorites").save(request.body, function(err,result){
 			console.log("data saved");
@@ -175,7 +185,8 @@ app.post("/sign-up", function(request,response){
 		
 		var user = {
 			username: request.body.username,
-			password: request.body.password
+			password: request.body.password,
+			category: "Category not chosen"
 			
 		}
 		
