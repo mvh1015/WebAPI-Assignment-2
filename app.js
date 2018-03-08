@@ -117,7 +117,7 @@ app.post("/new-topic", function(request,response){
 		
 		dbObj.collection("users").findOne({username:username}, function(err, results){
 			topicOfChoice = results.category;
-		}
+		});
 		
 		dbObj.collection("topic").update(topicOfChoice, function(err,result){
 			console.log("data saved");
